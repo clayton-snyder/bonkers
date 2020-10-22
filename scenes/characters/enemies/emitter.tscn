@@ -1,0 +1,32 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://emitter.gd" type="Script" id=1]
+[ext_resource path="res://assets/characters/enemies/emitter.png" type="Texture" id=2]
+[ext_resource path="res://scenes/characters/enemies/emmiter_move_timer.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 8.92648
+
+[node name="emitter" type="KinematicBody2D"]
+collision_layer = 8
+collision_mask = 2147483652
+script = ExtResource( 1 )
+move_speed = 100.0
+
+[node name="Sprite" type="Sprite" parent="."]
+self_modulate = Color( 0.886275, 0, 0, 1 )
+scale = Vector2( 0.535437, 0.535437 )
+texture = ExtResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="emitter_spawn_timer" type="Timer" parent="."]
+autostart = true
+
+[node name="emmiter_move_timer" type="Timer" parent="."]
+one_shot = true
+script = ExtResource( 3 )
+[connection signal="timeout" from="emitter_spawn_timer" to="." method="_on_spawn_timer_timeout"]
+[connection signal="timeout" from="emmiter_move_timer" to="." method="_on_emmiter_move_timer_timeout"]
+[connection signal="timeout" from="emmiter_move_timer" to="emmiter_move_timer" method="_on_emmiter_move_timer_timeout"]
