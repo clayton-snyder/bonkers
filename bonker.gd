@@ -1,9 +1,9 @@
 extends KinematicBody2D
 
 export var bullet_speed : float = 500.0
-export var bonker_speed : float = 120.0
-export var curr_speed : float = 120.0
-export var dir_vec : Vector2
+export var bonker_speed : float = 120.0 # prev 120
+var curr_speed : float
+var dir_vec : Vector2
 var velocity : Vector2
 var is_bullet : bool = false
 
@@ -12,8 +12,13 @@ func _ready():
 		curr_speed = bullet_speed
 		$Sprite.self_modulate = Color(0, 1, 0)
 		set_damage_enemies(true)
+		set_affected_by_grav_field(true)
+	else:
+		curr_speed = bonker_speed
+		set_damage_enemies(false)
+		set_affected_by_grav_field(true)
 
-func _physics_process(delta):
+func _process(delta):
 	# Direction times speed (scalar) to increase magnitude, scaled back by delta
 	velocity = dir_vec * curr_speed * delta
 	var coll : KinematicCollision2D = self.move_and_collide(velocity)
@@ -29,6 +34,7 @@ func _physics_process(delta):
 			$Sprite.self_modulate = Color(1, 1, 1)
 			# Now that not a bullet, shouldn't collide with/damage enemies
 			set_damage_enemies(false)
+			set_affected_by_grav_field(true)
 		# Bounce the direction only; we want to maintain speed
 		dir_vec = dir_vec.bounce(coll.normal).normalized()
 		# re-calc velocity
@@ -41,4 +47,7 @@ func get_class():
 	
 func set_damage_enemies(damage_enemies : bool):
 	self.set_collision_mask_bit(3, damage_enemies)
+	
+func set_affected_by_grav_field(affected : bool):
+	self.set_collision_mask_bit(5, affected)
 

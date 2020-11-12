@@ -22,11 +22,12 @@ texture = ExtResource( 2 )
 shape = SubResource( 1 )
 
 [node name="emitter_spawn_timer" type="Timer" parent="."]
+wait_time = 2.0
 autostart = true
 
 [node name="emmiter_move_timer" type="Timer" parent="."]
 one_shot = true
 script = ExtResource( 3 )
 [connection signal="timeout" from="emitter_spawn_timer" to="." method="_on_spawn_timer_timeout"]
-[connection signal="timeout" from="emmiter_move_timer" to="." method="_on_emmiter_move_timer_timeout"]
 [connection signal="timeout" from="emmiter_move_timer" to="emmiter_move_timer" method="_on_emmiter_move_timer_timeout"]
+[connection signal="timeout" from="emmiter_move_timer" to="." method="_on_emmiter_move_timer_timeout"]

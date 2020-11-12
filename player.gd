@@ -9,16 +9,20 @@ var shield_charge_curr : float
 export var shield_use_rate : float = 20.0
 export var shield_charge_rate : float = 50.0
 var shield_locked
+var grav_field_locked
+export var grav_cd_secs : float = 10.0
 
 var shield_new_activate : bool
 const BonkerScene = preload('res://scenes/objects/bonker.tscn')
+const GravFieldScene = preload('res://scenes/objects/grav_field.tscn')
 
 func _ready():
 	curr_health = max_health
 	shield_on = false
 	shield_charge_curr = shield_charge_max
 	shield_new_activate = true
-	
+	grav_field_locked = false
+
 func _process(delta):
 	if Input.is_action_pressed('player_shield'):
 		if shield_new_activate:
@@ -46,6 +50,17 @@ func _process(delta):
 		new_bonker.position = self.get_global_position()
 		new_bonker.is_bullet = true
 		get_tree().get_root().get_node('root').add_child(new_bonker)
+
+	if Input.is_action_just_pressed('player_alt_shoot'):
+		if not grav_field_locked:
+			var new_grav_field = GravFieldScene.instance()
+			new_grav_field.position = get_global_mouse_position() # need to bound check
+			get_tree().get_root().get_node('root').add_child_below_node(get_node('../TileMap'), new_grav_field)
+			grav_field_locked = true
+			$grav_cd_timer.start(grav_cd_secs)
+		else:
+			# play sound
+			pass
 
 func _physics_process(delta):
 	var coll : KinematicCollision2D
@@ -79,7 +94,7 @@ func set_shield_on(shield_on : bool):
 		$shield/Sprite.hide()
 		$shield/shield_collide_shape.disabled = true
 		shield_new_activate = true # slighly misleading; is for next time user presses shield
-	
+
 func lock_shield():
 		shield_locked = true
 		shield_on = false
@@ -87,7 +102,7 @@ func lock_shield():
 		$shield/shield_collide_shape.disabled = true
 		$shield/shield_lock_timer.start(1)
 		$shield/shield_charge_bar.tint_progress = Color(1, 0, 0)
-	
+
 
 func get_class():
 	return 'player'
@@ -103,3 +118,7 @@ func _on_player_hitbox_body_entered(body : Node2D):
 func _on_shield_body_entered(body):
 	if body.get_class() == 'bonker' and not body.is_bullet:
 		body.queue_free()
+
+
+func _on_grav_cd_timer_timeout():
+	grav_field_locked = false
