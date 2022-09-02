@@ -57,8 +57,8 @@ func _process(delta):
 		if not grav_field_locked:
 			var new_grav_field = GravFieldScene.instance()
 			new_grav_field.position = get_global_mouse_position() # need to bound check
-			self.get_parent().add_child(new_grav_field)
-			self.get_parent().move_child(new_grav_field, 0)
+			self.get_parent().add_child_below_node(self.get_parent().get_node("ColorRect"), new_grav_field)
+			#self.get_parent().move_child(new_grav_field, 0)
 			grav_field_locked = true
 			$grav_cd_timer.start(grav_cd_secs)
 		else:
@@ -79,7 +79,7 @@ func _physics_process(delta):
 
 func take_damage(var damage_taken : int):
 	print('player taking damage')
-#	curr_health -= damage_taken
+	curr_health -= damage_taken
 	$player_sprite.show_percent(float(curr_health) / max_health)
 	if curr_health <= 0:
 		get_tree().change_scene('res://scenes/game_states/end_screen.tscn')

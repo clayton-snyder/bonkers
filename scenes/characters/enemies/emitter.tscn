@@ -5,7 +5,7 @@
 [ext_resource path="res://scenes/characters/enemies/emmiter_move_timer.gd" type="Script" id=3]
 [ext_resource path="res://assets/media/small_explosion.ogg" type="AudioStream" id=4]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=2]
 radius = 8.92648
 
 [node name="emitter" type="KinematicBody2D"]
@@ -20,7 +20,7 @@ scale = Vector2( 0.535437, 0.535437 )
 texture = ExtResource( 2 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 
 [node name="emitter_spawn_timer" type="Timer" parent="."]
 wait_time = 2.0
