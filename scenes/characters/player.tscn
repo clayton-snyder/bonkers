@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://player.gd" type="Script" id=1]
 [ext_resource path="res://assets/characters/player/player.png" type="Texture" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://assets/characters/player/shield.png" type="Texture" id=5]
 [ext_resource path="res://shield_charge.gd" type="Script" id=6]
 [ext_resource path="res://player_sprite.gd" type="Script" id=7]
+[ext_resource path="res://assets/media/laserShoot.ogg" type="AudioStream" id=8]
+[ext_resource path="res://assets/media/shield.ogg" type="AudioStream" id=9]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16.2433, 16.5711 )
@@ -66,6 +68,16 @@ __meta__ = {
 }
 
 [node name="grav_cd_timer" type="Timer" parent="."]
+
+[node name="ShootSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+volume_db = -6.0
+pitch_scale = 1.2
+
+[node name="ShieldSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = -15.0
+
 [connection signal="body_entered" from="player_hitbox" to="." method="_on_player_hitbox_body_entered"]
 [connection signal="body_entered" from="shield" to="." method="_on_shield_body_entered"]
 [connection signal="timeout" from="grav_cd_timer" to="." method="_on_grav_cd_timer_timeout"]

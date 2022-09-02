@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/ping-pong-single-bounce.ogg-97b50e4b4c226c8c3e2c1ffabe1156d4.oggstr"
+
+[deps]
+
+source_file="res://assets/media/ping-pong-single-bounce.ogg"
+dest_files=[ "res://.import/ping-pong-single-bounce.ogg-97b50e4b4c226c8c3e2c1ffabe1156d4.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

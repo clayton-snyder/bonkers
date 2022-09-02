@@ -1,11 +1,16 @@
 extends Area2D
 
-export var grav : float = 35.0
+export var grav : float = 45.0
 export var duration : float = 50.0
+export var black_hole_thresh : int = 20
+export var base_radius : float = 75.0
+
+const BlackHoleScene = preload('res://scenes/objects/black_hole.tscn')
 
 func _ready():
 	self.set_collision_layer_bit(0, false)
 	self.set_collision_layer_bit(5, true)
+	$CollisionShape2D.shape.radius = base_radius
 	$Timer.start(duration)
 
 func _process(delta):
@@ -15,7 +20,7 @@ func _process(delta):
 #		print (bonker.get_name())
 		var dist : float = self.get_global_position().distance_to(bonker.get_global_position())
 		var radius = $CollisionShape2D.shape.get_radius()
-		if dist < (radius / 2):
+		if dist < (get_close_orbit_dist()):
 			close_bonkers += 1
 		var closeness : float = (radius - dist) / radius
 		if closeness < 0:
@@ -26,10 +31,25 @@ func _process(delta):
 		var bonker_new_dir : Vector2 = (dir_to_me * weight) + (bonker_dir * (1 - weight))
 		bonker.dir_vec = bonker_new_dir.normalized()
 	set_extra_scale(0.1 * close_bonkers)
+	if close_bonkers >= black_hole_thresh:
+		black_hole()
 
 func set_extra_scale(extra_scale : float):
 	$Sprite.scale = Vector2(1.0 + extra_scale, 1.0 + extra_scale)
-	$CollisionShape2D.scale = Vector2(1.0 + extra_scale, 1.0 + extra_scale)
+#	$CollisionShape2D.scale = Vector2(1.0 + extra_scale, 1.0 + extra_scale)
+	var new_radius : float = base_radius * (1.0 + extra_scale)
+	$CollisionShape2D.shape.set_radius(new_radius)
+	print("radius: " + str($CollisionShape2D.shape.get_radius()))
+
+func black_hole():
+	var new_black_hole = BlackHoleScene.instance()
+	new_black_hole.position = self.get_global_position()
+	self.get_parent().add_child(new_black_hole)
+	self.get_parent().move_child(new_black_hole, 2)
+	self.queue_free()
+	
+func get_close_orbit_dist():
+	return $CollisionShape2D.shape.get_radius() / 2
 
 func _on_Timer_timeout():
 	self.queue_free()

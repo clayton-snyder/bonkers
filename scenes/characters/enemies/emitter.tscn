@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://emitter.gd" type="Script" id=1]
 [ext_resource path="res://assets/characters/enemies/emitter.png" type="Texture" id=2]
 [ext_resource path="res://scenes/characters/enemies/emmiter_move_timer.gd" type="Script" id=3]
+[ext_resource path="res://assets/media/small_explosion.ogg" type="AudioStream" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.92648
@@ -28,6 +29,11 @@ autostart = true
 [node name="emmiter_move_timer" type="Timer" parent="."]
 one_shot = true
 script = ExtResource( 3 )
+
+[node name="DieSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+pitch_scale = 0.6
+
 [connection signal="timeout" from="emitter_spawn_timer" to="." method="_on_spawn_timer_timeout"]
-[connection signal="timeout" from="emmiter_move_timer" to="emmiter_move_timer" method="_on_emmiter_move_timer_timeout"]
 [connection signal="timeout" from="emmiter_move_timer" to="." method="_on_emmiter_move_timer_timeout"]
+[connection signal="timeout" from="emmiter_move_timer" to="emmiter_move_timer" method="_on_emmiter_move_timer_timeout"]

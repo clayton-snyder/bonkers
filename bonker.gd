@@ -3,18 +3,19 @@ extends KinematicBody2D
 export var bullet_speed : float = 500.0
 export var bonker_speed : float = 120.0 # prev 120
 var curr_speed : float
-var dir_vec : Vector2
+export var dir_vec : Vector2
 var velocity : Vector2
 var is_bullet : bool = false
 
 func _ready():
 	if is_bullet:
 		curr_speed = bullet_speed
-		$Sprite.self_modulate = Color(0, 1, 0)
+		$Sprite.self_modulate = Color("009dff")
 		set_damage_enemies(true)
 		set_affected_by_grav_field(true)
 	else:
 		curr_speed = bonker_speed
+		$Sprite.self_modulate = Color("fdd902")
 		set_damage_enemies(false)
 		set_affected_by_grav_field(true)
 
@@ -31,10 +32,11 @@ func _process(delta):
 				return
 			is_bullet = false
 			curr_speed = bonker_speed
-			$Sprite.self_modulate = Color(1, 1, 1)
+			$Sprite.self_modulate = Color("fdd902")
 			# Now that not a bullet, shouldn't collide with/damage enemies
 			set_damage_enemies(false)
 			set_affected_by_grav_field(true)
+		$BonkSoundPlayer.play()
 		# Bounce the direction only; we want to maintain speed
 		dir_vec = dir_vec.bounce(coll.normal).normalized()
 		# re-calc velocity

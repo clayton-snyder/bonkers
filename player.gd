@@ -45,17 +45,20 @@ func _process(delta):
 	$shield/shield_charge_bar.value = shield_charge_curr
 
 	if Input.is_action_just_pressed('player_shoot'):
+		$ShootSoundPlayer.play()
 		var new_bonker = BonkerScene.instance()
 		new_bonker.dir_vec = self.get_global_position().direction_to(get_global_mouse_position()).normalized()
 		new_bonker.position = self.get_global_position()
 		new_bonker.is_bullet = true
-		get_tree().get_root().get_node('root').add_child(new_bonker)
+#		get_tree().get_root().get_node('root').add_child(new_bonker)
+		get_parent().add_child(new_bonker)
 
 	if Input.is_action_just_pressed('player_alt_shoot'):
 		if not grav_field_locked:
 			var new_grav_field = GravFieldScene.instance()
 			new_grav_field.position = get_global_mouse_position() # need to bound check
-			get_tree().get_root().get_node('root').add_child_below_node(get_node('../TileMap'), new_grav_field)
+			self.get_parent().add_child(new_grav_field)
+			self.get_parent().move_child(new_grav_field, 0)
 			grav_field_locked = true
 			$grav_cd_timer.start(grav_cd_secs)
 		else:
@@ -76,16 +79,23 @@ func _physics_process(delta):
 
 func take_damage(var damage_taken : int):
 	print('player taking damage')
-	curr_health -= damage_taken
+#	curr_health -= damage_taken
 	$player_sprite.show_percent(float(curr_health) / max_health)
 	if curr_health <= 0:
 		get_tree().change_scene('res://scenes/game_states/end_screen.tscn')
-		for child in get_tree().get_root().get_node('root').get_children():
-			if child.get_class() == 'bonker':
-				child.queue_free()
+		free_bonkers(get_tree().get_root().get_children())
+
+func free_bonkers(children : Array):
+	if children.size() <= 0:
+		return
+	for child in children:
+		if child.get_class() == 'bonker':
+			child.queue_free()
+		free_bonkers(child.get_children())
 
 func set_shield_on(shield_on : bool):
 	if shield_on:
+		$ShieldSoundPlayer.play()
 		shield_on = true
 		$shield/Sprite.show()
 		$shield/shield_collide_shape.disabled = false

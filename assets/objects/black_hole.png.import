@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bonker.png-d73b95115f90e3511a30283c5217a816.stex"
+path="res://.import/black_hole.png-4d81059b4eaccc3a77f9b9dae9215fe8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/objects/bonker.png"
-dest_files=[ "res://.import/bonker.png-d73b95115f90e3511a30283c5217a816.stex" ]
+source_file="res://assets/objects/black_hole.png"
+dest_files=[ "res://.import/black_hole.png-4d81059b4eaccc3a77f9b9dae9215fe8.stex" ]
 
 [params]
 
@@ -28,7 +28,6 @@ process/fix_alpha_border=true
 process/premult_alpha=false
 process/HDR_as_SRGB=false
 process/invert_color=false
-process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=true
